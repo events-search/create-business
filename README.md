@@ -1,5 +1,5 @@
 # create-business
-Spring boot application used to create a business
+Spring boot application used to create, retrieve, search, and update a business.
 
 # Setup instructions
 1. Download jdk 8 - https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
