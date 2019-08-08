@@ -1,13 +1,25 @@
 package com.event.business.model;
 
-import com.event.business.enums.PhoneType;
+import java.io.Serializable;
 
-public class Phone {
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
+
+@DynamoDBDocument
+public class Phone implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private String phoneNumber;
 	
-	private PhoneType phoneType;
+	private String phoneType;
+	
+	private String fax;
 
+	@DynamoDBAttribute
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}
@@ -16,12 +28,24 @@ public class Phone {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public PhoneType getPhoneType() {
+	@DynamoDBAttribute
+	public String getPhoneType() {
 		return phoneType;
 	}
 
-	public void setPhoneType(PhoneType phoneType) {
+	public void setPhoneType(String phoneType) {
 		this.phoneType = phoneType;
 	}
+
+	@DynamoDBAttribute
+	public String getFax() {
+		return fax;
+	}
+
+	public void setFax(String fax) {
+		this.fax = fax;
+	}
+	
+	
 	
 }

@@ -1,10 +1,19 @@
 package com.event.business.model;
 
-import com.event.business.enums.AddressType;
+import java.io.Serializable;
 
-public class Address {
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
+
+@DynamoDBDocument
+public class Address implements Serializable {
 	
-	private AddressType addressType;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private String addressType;
 	
 	private String addressLine1;
 	
@@ -16,6 +25,7 @@ public class Address {
 	
 	private String zipCode;
 
+	@DynamoDBAttribute
 	public String getAddressLine1() {
 		return addressLine1;
 	}
@@ -24,6 +34,7 @@ public class Address {
 		this.addressLine1 = addressLine1;
 	}
 
+	@DynamoDBAttribute
 	public String getAddressLine2() {
 		return addressLine2;
 	}
@@ -32,6 +43,7 @@ public class Address {
 		this.addressLine2 = addressLine2;
 	}
 
+	@DynamoDBAttribute
 	public String getCity() {
 		return city;
 	}
@@ -40,6 +52,7 @@ public class Address {
 		this.city = city;
 	}
 
+	@DynamoDBAttribute
 	public String getState() {
 		return state;
 	}
@@ -48,6 +61,7 @@ public class Address {
 		this.state = state;
 	}
 
+	@DynamoDBAttribute
 	public String getZipCode() {
 		return zipCode;
 	}
@@ -56,11 +70,11 @@ public class Address {
 		this.zipCode = zipCode;
 	}
 
-	public AddressType getAddressType() {
+	public String getAddressType() {
 		return addressType;
 	}
 
-	public void setAddressType(AddressType addressType) {
+	public void setAddressType(String addressType) {
 		this.addressType = addressType;
 	}
 	

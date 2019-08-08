@@ -1,14 +1,16 @@
 package com.event.business.controller;
 
+import javax.websocket.server.PathParam;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.event.business.enums.AddressType;
-import com.event.business.enums.PhoneType;
-import com.event.business.model.Address;
-import com.event.business.model.Phone;
 import com.event.business.model.RetreiveBusinessDetails;
+import com.event.business.util.DynamoDBRepository;
 
 @RestController
 public class CreateBusinessController {
@@ -17,14 +19,29 @@ public class CreateBusinessController {
 	           "   \"Api Status\":\"API IS UP AND RUNNING\"\n" +
 	           "}";
 	
+	@Autowired
+	private DynamoDBRepository repository;
+	
 	@RequestMapping(path = "/business/health", method = RequestMethod.GET)
 	public String healthCheck() {
 		return apiStatus;
 	}
 	
+	@PostMapping(path = "/business")
+	public void persistBusiness(@RequestBody RetreiveBusinessDetails businessDetails) {
+		repository.insertIntoDB(businessDetails);
+	}
+	
+	@RequestMapping(path = "/business/{user_name}", method = RequestMethod.GET)
+	public RetreiveBusinessDetails retrieveBusinessDetailsByUsername(@PathParam(value="user_name") String user_name) {		
+		return repository.getBusinessDetails(user_name);
+	}
+	
 	@RequestMapping(path = "/business/retrieve", method = RequestMethod.GET)
 	public RetreiveBusinessDetails retrieveBusinessDetails() {
 		
+		return repository.getBusinessDetails("09ca9cea-9f69-4282-8d01-c897be746f9e");
+		/*
 		RetreiveBusinessDetails retreiveBusinessDetails = new RetreiveBusinessDetails();
 		
 		Address address = new Address();
@@ -43,7 +60,7 @@ public class CreateBusinessController {
 		retreiveBusinessDetails.setBusinessType("Music");
 		retreiveBusinessDetails.setDescription("We arrange dance floors with DJ");
 		retreiveBusinessDetails.setPhone(phone);
-		return retreiveBusinessDetails;
+		return retreiveBusinessDetails;*/
 	}
 
 }
