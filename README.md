@@ -30,3 +30,33 @@ Hit http://localhost:8080/create/business/health from browser or postman and you
    "Api Status":"API IS UP AND RUNNING"
 }
 
+# Running the application as a Docker image locally.
+
+Install docker in your local machine using the below link.
+
+https://docs.docker.com/docker-for-windows/install/
+
+Building the Docker image commands.
+
+Navigate to the Dockerfile location and run:
+
+Docker build -t <IMAGE_NAME>:1.0 .
+
+eg... Docker build -t mybusiness:1.0 .
+
+After successful build run the command to find the image you built.
+
+Docker images
+
+Now run the image in your local.
+
+Docker run -p 8080:8080 -t mybusiness:1.0
+
+You hit your localhost using:
+
+http://localhost:8080/<YOUR END POINT>
+
+For more docker commands...
+
+https://www.docker.com/sites/default/files/Docker_CheatSheet_08.09.2016_0.pdf
+
