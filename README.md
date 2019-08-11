@@ -14,6 +14,8 @@ Verify the install by running the below commands from command prompt
 java --version
 mvn -version
 
+edited
+
 # Running the application
 After cloning the project
 Cd to create-business
