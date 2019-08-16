@@ -1,7 +1,6 @@
 package com.event.business.model;
 
 import java.io.Serializable;
-import java.util.Date;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
@@ -14,21 +13,21 @@ public class TransactionDetails implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private String createBy;
+	private String createdBy;
 	
 	private String updatedBy;
 	
-	private Date createdDate;
+	private String createdDate;
 	
-	private Date updateDate ;
+	private String updatedDate;
 
 	@DynamoDBAttribute
-	public String getCreateBy() {
-		return createBy;
+	public String getCreatedBy() {
+		return createdBy;
 	}
 
-	public void setCreateBy(String createBy) {
-		this.createBy = createBy;
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
 	}
 
 	@DynamoDBAttribute
@@ -41,23 +40,21 @@ public class TransactionDetails implements Serializable {
 	}
 
 	@DynamoDBAttribute
-	public Date getCreatedDate() {
+	public String getCreatedDate() {
 		return createdDate;
 	}
 
-	public void setCreatedDate(Date createdDate) {
+	public void setCreatedDate(String createdDate) {
 		this.createdDate = createdDate;
 	}
 
 	@DynamoDBAttribute
-	public Date getUpdateDate() {
-		return updateDate;
+	public String getUpdatedDate() {
+		return updatedDate;
 	}
 
-	public void setUpdateDate(Date updateDate) {
-		this.updateDate = updateDate;
+	public void setUpdatedDate(String updatedDate) {
+		this.updatedDate = updatedDate;
 	}
 	
-	
-		
 }

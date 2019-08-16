@@ -27,7 +27,6 @@ public class Service implements Serializable{
 		this.serviceName = serviceName;
 	}
 
-	@DynamoDBAttribute
 	public Map<String, String> getServiceDetails() {
 		return serviceDetails;
 	}

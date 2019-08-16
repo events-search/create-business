@@ -11,23 +11,22 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBSaveExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.amazonaws.services.dynamodbv2.model.ExpectedAttributeValue;
-import com.event.business.model.RetreiveBusinessDetails;
+import com.event.business.model.ServiceType;
 
 @Repository
-public class DynamoDBRepository {
+public class ServiceTypeRepository{
 	
 	@Autowired
 	private DynamoDBMapper mapper;
 	
-	public void insertIntoDB(RetreiveBusinessDetails object) {
+	public void insertIntoDB(ServiceType object) {
 		mapper.save(object);
 		
 	}
 	
-	public void updateIntoDB(RetreiveBusinessDetails e, String primaryKeyValue) {
-		mapper.save(e, getBuildExpression("businessId", primaryKeyValue));
+	public void updateIntoDB(ServiceType e, String primaryKeyValue) {
+		mapper.save(e, getBuildExpression("serviceTypeId", primaryKeyValue));
 	}
-	
 	
 	public DynamoDBMapper getMapper() {
 		return mapper;

@@ -9,7 +9,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 
 @DynamoDBTable(tableName= "BusinessDetails")
-public class RetreiveBusinessDetails implements Serializable {
+public class BusinessDetails implements Serializable {
 
 	/**
 	 * 
@@ -40,6 +40,8 @@ public class RetreiveBusinessDetails implements Serializable {
 	private String email;
 	
 	private String websiteUrl;
+	
+	private String businessEstDate;
 	
 	private TransactionDetails transaction;
 	
@@ -150,6 +152,15 @@ public class RetreiveBusinessDetails implements Serializable {
 
 	public void setWebsiteUrl(String websiteUrl) {
 		this.websiteUrl = websiteUrl;
+	}
+	
+	@DynamoDBAttribute
+	public String getBusinessEstDate() {
+		return businessEstDate;
+	}
+
+	public void setBusinessEstDate(String businessEstDate) {
+		this.businessEstDate = businessEstDate;
 	}
 
 	public TransactionDetails getTransaction() {

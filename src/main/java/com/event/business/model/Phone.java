@@ -6,46 +6,33 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
 
 @DynamoDBDocument
-public class Phone implements Serializable{
+public class Phone implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private String phoneNumber;
-	
-	private String phoneType;
-	
-	private String fax;
+	private String contactType;
+
+	private String phonenumber;
 
 	@DynamoDBAttribute
-	public String getPhoneNumber() {
-		return phoneNumber;
+	public String getContactType() {
+		return contactType;
 	}
 
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
+	public void setContactType(String contactType) {
+		this.contactType = contactType;
 	}
 
 	@DynamoDBAttribute
-	public String getPhoneType() {
-		return phoneType;
+	public String getPhonenumber() {
+		return phonenumber;
 	}
 
-	public void setPhoneType(String phoneType) {
-		this.phoneType = phoneType;
+	public void setPhonenumber(String phonenumber) {
+		this.phonenumber = phonenumber;
 	}
 
-	@DynamoDBAttribute
-	public String getFax() {
-		return fax;
-	}
-
-	public void setFax(String fax) {
-		this.fax = fax;
-	}
-	
-	
-	
 }

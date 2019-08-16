@@ -11,20 +11,20 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBSaveExpression;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.amazonaws.services.dynamodbv2.model.ExpectedAttributeValue;
-import com.event.business.model.RetreiveBusinessDetails;
+import com.event.business.model.BusinessDetails;
 
 @Repository
-public class DynamoDBRepository {
+public class BusinessRepository{
 	
 	@Autowired
 	private DynamoDBMapper mapper;
 	
-	public void insertIntoDB(RetreiveBusinessDetails object) {
+	public void insertIntoDB(BusinessDetails object) {
 		mapper.save(object);
 		
 	}
 	
-	public void updateIntoDB(RetreiveBusinessDetails e, String primaryKeyValue) {
+	public void updateIntoDB(BusinessDetails e, String primaryKeyValue) {
 		mapper.save(e, getBuildExpression("businessId", primaryKeyValue));
 	}
 	

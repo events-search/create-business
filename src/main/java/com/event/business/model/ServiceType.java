@@ -10,8 +10,12 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 @DynamoDBTable(tableName= "ServiceType")
 public class ServiceType implements Serializable {
 
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
 		
+	
     private String serviceTypeId;
 	
 	private String key;

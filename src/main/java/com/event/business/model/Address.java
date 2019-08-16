@@ -70,6 +70,7 @@ public class Address implements Serializable {
 		this.zipCode = zipCode;
 	}
 
+	@DynamoDBAttribute
 	public String getAddressType() {
 		return addressType;
 	}
