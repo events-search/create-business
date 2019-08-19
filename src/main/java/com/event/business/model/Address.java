@@ -24,6 +24,10 @@ public class Address implements Serializable {
 	private String state;
 	
 	private String zipCode;
+	
+	private String landmark;
+	
+	private String country;
 
 	@DynamoDBAttribute
 	public String getAddressLine1() {
@@ -77,6 +81,24 @@ public class Address implements Serializable {
 
 	public void setAddressType(String addressType) {
 		this.addressType = addressType;
+	}
+
+	@DynamoDBAttribute
+	public String getLandmark() {
+		return landmark;
+	}
+
+	public void setLandmark(String landmark) {
+		this.landmark = landmark;
+	}
+
+	@DynamoDBAttribute
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
 	}
 	
 	

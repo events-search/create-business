@@ -13,24 +13,24 @@ public class Phone implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private String contactType;
+	private String phoneType;
 
 	private String phonenumber;
 
 	@DynamoDBAttribute
-	public String getContactType() {
-		return contactType;
+	public String getPhoneType() {
+		return phoneType;
 	}
 
-	public void setContactType(String contactType) {
-		this.contactType = contactType;
+	public void setPhoneType(String phoneType) {
+		this.phoneType = phoneType;
 	}
-
+	
 	@DynamoDBAttribute
 	public String getPhonenumber() {
 		return phonenumber;
 	}
-
+	
 	public void setPhonenumber(String phonenumber) {
 		this.phonenumber = phonenumber;
 	}
