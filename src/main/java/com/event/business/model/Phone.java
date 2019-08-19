@@ -1,27 +1,38 @@
 package com.event.business.model;
 
-import com.event.business.enums.PhoneType;
+import java.io.Serializable;
 
-public class Phone {
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
 
-	private String phoneNumber;
-	
-	private PhoneType phoneType;
+@DynamoDBDocument
+public class Phone implements Serializable {
 
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
+	private String phoneType;
 
-	public PhoneType getPhoneType() {
+	private String phonenumber;
+
+	@DynamoDBAttribute
+	public String getPhoneType() {
 		return phoneType;
 	}
 
-	public void setPhoneType(PhoneType phoneType) {
+	public void setPhoneType(String phoneType) {
 		this.phoneType = phoneType;
 	}
 	
+	@DynamoDBAttribute
+	public String getPhonenumber() {
+		return phonenumber;
+	}
+	
+	public void setPhonenumber(String phonenumber) {
+		this.phonenumber = phonenumber;
+	}
+
 }
