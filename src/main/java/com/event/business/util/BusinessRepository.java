@@ -15,13 +15,15 @@ public class BusinessRepository{
 	@Autowired
 	private DynamoDBMapper mapper;
 	
-	public void insertIntoDB(BusinessDetails object) {
+	public BusinessDetails insertIntoDB(BusinessDetails object) {
 		mapper.save(object);
+		return object;
 		
 	}
 	
-	public void updateIntoDB(BusinessDetails e, String primaryKeyValue) {
+	public BusinessDetails updateIntoDB(BusinessDetails e, String primaryKeyValue) {
 		mapper.save(e, EventUtil.getBuildExpression("businessId", primaryKeyValue));
+		return e;
 	}
 	
 	public BusinessDetails getById(String id) {

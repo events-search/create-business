@@ -3,6 +3,8 @@ package com.event.business.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,27 +23,27 @@ public class CreateBusinessController {
 	private BusinessRepository repository;
 	
 	@PostMapping(path = "/business")
-	public void persistBusiness(@RequestBody BusinessDetails businessDetails) {
-		repository.insertIntoDB(businessDetails);
+	public ResponseEntity<BusinessDetails> persistBusiness(@RequestBody BusinessDetails businessDetails) {
+		return new ResponseEntity<>(repository.insertIntoDB(businessDetails), HttpStatus.CREATED);
 	}
 	
 	@PutMapping(path = "/business")
-	public void updateBusiness(@RequestBody BusinessDetails businessDetails) {
+	public ResponseEntity<BusinessDetails> updateBusiness(@RequestBody BusinessDetails businessDetails) {
 		if(!StringUtils.isEmpty(businessDetails.getBusinessId())) {
-		repository.updateIntoDB(businessDetails, businessDetails.getBusinessId());
+			return new ResponseEntity<>(repository.updateIntoDB(businessDetails, businessDetails.getBusinessId()), HttpStatus.OK);
 		}else {
-			//need to throw invalidParameterException
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
 	}
 	
 	@GetMapping(path = "/business/{business_id}")
-	public BusinessDetails getBusinessById(@PathVariable(value="business_id", required=true) String businessId  ) {
-		  return repository.getById(businessId);
+	public ResponseEntity<BusinessDetails> getBusinessById(@PathVariable(value="business_id", required=true) String businessId  ) {
+		return new ResponseEntity<>(repository.getById(businessId), HttpStatus.OK);
 	 }
 	
 	@GetMapping(path = "/business")
-	public List<BusinessDetails> getBusiness() {
-		  return repository.getAll();
+	public ResponseEntity<List<BusinessDetails>> getBusiness() {
+		  return new ResponseEntity<>(repository.getAll(), HttpStatus.OK);
 	 }
 	
 }

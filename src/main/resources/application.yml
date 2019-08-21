@@ -7,9 +7,9 @@ aws:
   end:
     point: dynamodb.us-east-2.amazonaws.com
   secret:
-    key: flzJXBwJ54qyeJO9OLG3LyFHrPIkfdJD7aLaT2q7
+    key: 
   access:
-    key: AKIASP2YVE33ZDS6K76O
+    key: 
 server:
   port: 8081
 info:

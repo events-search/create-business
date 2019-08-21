@@ -15,13 +15,15 @@ public class LoginRepository {
 	@Autowired
 	private DynamoDBMapper mapper;
 
-	public void insertIntoDB(LoginDetails object) {
+	public LoginDetails insertIntoDB(LoginDetails object) {
 		mapper.save(object);
+		return object;
 
 	}
 
-	public void updateIntoDB(LoginDetails e, String primaryKeyValue) {
+	public LoginDetails updateIntoDB(LoginDetails e, String primaryKeyValue) {
 		mapper.save(e, EventUtil.getBuildExpression("loginDetailsId", primaryKeyValue));
+		return e;
 	}
 
 	public DynamoDBMapper getMapper() {
