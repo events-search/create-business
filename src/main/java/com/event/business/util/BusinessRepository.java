@@ -1,16 +1,12 @@
 package com.event.business.util;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBSaveExpression;
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
-import com.amazonaws.services.dynamodbv2.model.ExpectedAttributeValue;
+import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
 import com.event.business.model.BusinessDetails;
 
 @Repository
@@ -25,9 +21,16 @@ public class BusinessRepository{
 	}
 	
 	public void updateIntoDB(BusinessDetails e, String primaryKeyValue) {
-		mapper.save(e, getBuildExpression("businessId", primaryKeyValue));
+		mapper.save(e, EventUtil.getBuildExpression("businessId", primaryKeyValue));
 	}
 	
+	public BusinessDetails getById(String id) {
+	  return mapper.load(BusinessDetails.class, id);
+	}	
+	
+	public List<BusinessDetails> getAll() {
+		return mapper.scan(BusinessDetails.class, new DynamoDBScanExpression());
+	}
 	
 	public DynamoDBMapper getMapper() {
 		return mapper;
@@ -37,11 +40,4 @@ public class BusinessRepository{
 		this.mapper = mapper;
 	}
 	
-	public DynamoDBSaveExpression getBuildExpression(String pk, String pkValue){
-    	DynamoDBSaveExpression expression = new DynamoDBSaveExpression();
-    	Map<String, ExpectedAttributeValue> expectedValue=new HashMap<>();
-    	expectedValue.put(pk, new ExpectedAttributeValue(new AttributeValue(pkValue)).withComparisonOperator(ComparisonOperator.EQ));
-    	expression.setExpected(expectedValue);   
-    	return expression;
-    }
 }

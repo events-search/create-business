@@ -1,7 +1,11 @@
 package com.event.business.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,5 +33,15 @@ public class CreateBusinessController {
 			//need to throw invalidParameterException
 		}
 	}
-		
+	
+	@GetMapping(path = "/business/{business_id}")
+	public BusinessDetails getBusinessById(@PathVariable(value="business_id", required=true) String businessId  ) {
+		  return repository.getById(businessId);
+	 }
+	
+	@GetMapping(path = "/business")
+	public List<BusinessDetails> getBusiness() {
+		  return repository.getAll();
+	 }
+	
 }
