@@ -2,6 +2,8 @@ package com.event.business.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +25,12 @@ public class CreateBusinessController {
 	private BusinessRepository repository;
 	
 	@PostMapping(path = "/business")
-	public ResponseEntity<BusinessDetails> persistBusiness(@RequestBody BusinessDetails businessDetails) {
+	public ResponseEntity<BusinessDetails> persistBusiness(@Valid @RequestBody BusinessDetails businessDetails) {
 		return new ResponseEntity<>(repository.insertIntoDB(businessDetails), HttpStatus.CREATED);
 	}
 	
 	@PutMapping(path = "/business")
-	public ResponseEntity<BusinessDetails> updateBusiness(@RequestBody BusinessDetails businessDetails) {
+	public ResponseEntity<BusinessDetails> updateBusiness(@Valid @RequestBody BusinessDetails businessDetails) {
 		if(!StringUtils.isEmpty(businessDetails.getBusinessId())) {
 			return new ResponseEntity<>(repository.updateIntoDB(businessDetails, businessDetails.getBusinessId()), HttpStatus.OK);
 		}else {
