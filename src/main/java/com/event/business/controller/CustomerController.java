@@ -42,7 +42,6 @@ public class CustomerController {
 		return repository.search(emailId);
 	}
 	
-
 	@GetMapping(path = "/customers/{cust_id}")
 	public Customer getCustomerById(@PathVariable(value="cust_id", required=true) String custId  ) {
 		  return repository.getById(custId);
@@ -52,6 +51,5 @@ public class CustomerController {
 	public List<Customer> getCustomer() {
 		  return repository.getAll();
 	 }
-	
 	
 }

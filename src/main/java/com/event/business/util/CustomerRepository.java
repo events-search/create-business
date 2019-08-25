@@ -17,7 +17,7 @@ import com.event.business.model.Customer;
 @Repository
 public class CustomerRepository {
 
-	@Autowired
+  @Autowired
 	private DynamoDBMapper mapper;
 
 	public void insertIntoDB(Customer object) {
@@ -37,7 +37,7 @@ public class CustomerRepository {
 		this.mapper = mapper;
 	}
 
-	public Customer getById(String id) {
+  public Customer getById(String id) {
 		return mapper.load(Customer.class, id);
 	}
 
@@ -50,7 +50,7 @@ public class CustomerRepository {
 		expectedAttribute.put(":emailId", new AttributeValue(emailId));
 		DynamoDBQueryExpression<Customer> dbQExp = new DynamoDBQueryExpression<>();
 		dbQExp.setFilterExpression("emailId = :emailId");
-		return this.mapper.query(Customer.class, dbQExp);
+  	return this.mapper.query(Customer.class, dbQExp);
 	}
 
 }
