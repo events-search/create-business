@@ -1,12 +1,9 @@
 package com.event.business.controller;
 
-import java.util.Collection;
-
-import javax.websocket.server.PathParam;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,23 +19,17 @@ public class LoginController {
 	private LoginRepository repository;
 	
 	@PostMapping(path = "/loginDetails")
-	public void persistBusiness(@RequestBody LoginDetails loginDetails) {
-		repository.insertIntoDB(loginDetails);
+	public ResponseEntity<LoginDetails> persistBusiness(@RequestBody LoginDetails loginDetails) {
+		return new ResponseEntity<>(repository.insertIntoDB(loginDetails), HttpStatus.CREATED);
 	}
 	
 	@PutMapping(path = "/loginDetails")
-	public void updateBusiness(@RequestBody LoginDetails loginDetails) {
+	public ResponseEntity<LoginDetails> updateBusiness(@RequestBody LoginDetails loginDetails) {
 		if(!StringUtils.isEmpty(loginDetails.getLoginDetailsId())) {
-		repository.updateIntoDB(loginDetails, loginDetails.getLoginDetailsId());
+			return new ResponseEntity<>(repository.updateIntoDB(loginDetails, loginDetails.getLoginDetailsId()), HttpStatus.CREATED);
 		}else {
-			//need to throw invalidParameterException
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
 	}
-	
-	@GetMapping(path="/loginDetails/{user_name}")
-	public  Collection<LoginDetails> getServiceTypeByCode(@PathParam(value="user_name") String userName){
-       return repository.getItem(userName);
-       
-	}
-		
+			
 }

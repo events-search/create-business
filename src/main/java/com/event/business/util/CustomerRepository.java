@@ -20,13 +20,15 @@ public class CustomerRepository {
   @Autowired
 	private DynamoDBMapper mapper;
 
-	public void insertIntoDB(Customer object) {
-		mapper.save(object);
+	public Customer insertIntoDB(Customer customer) {
+		mapper.save(customer);
+		return customer;
 
 	}
 
-	public void updateIntoDB(Customer e, String primaryKeyValue) {
-		mapper.save(e, EventUtil.getBuildExpression("CustomerId", primaryKeyValue));
+	public Customer updateIntoDB(Customer customer, String primaryKeyValue) {
+		mapper.save(customer, EventUtil.getBuildExpression("CustomerId", primaryKeyValue));
+	    return customer;
 	}
 
 	public DynamoDBMapper getMapper() {
