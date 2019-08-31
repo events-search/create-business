@@ -22,6 +22,47 @@ info:
       version: @java.version@  
 services:
   offered:
-    DJ: DJ
-    CATERING: CATERING
-          
+    space providers:
+      - hotels/largy
+      - Resorts
+      - Formhouse
+    Pandith Service:
+      - wedding
+      - funeral     
+    Fashion:
+      - bride dress designers
+      - groom dress designers
+      - all types of clothing stores
+      - footwear stores
+      - jewelry stores
+      - cosmetic stores
+      - fashion designers
+    gifting and printing services:
+      - gift shops
+      - wedding card printers
+      - handloom gift item makers	
+    matrimonial services:
+    catering services:
+      - with food
+      - only catering boys
+    event organisers:
+      - All types of events or
+    beauty services:
+      - beauty parlours for both men and women
+      - individual beauticians
+    bakers:
+      - specialist for birthday cakes
+      - specialist for wedding cakes
+      - all type of bakery services
+    band baaja services:
+      - DJ
+      - sunny Mela services
+      - Bharat bandh services
+    photography section:
+    security services:
+    kidsone:
+      - magicians
+      - gaming equipment providers
+    housekeeping services:
+    transportation:
+      - Packers and movers
