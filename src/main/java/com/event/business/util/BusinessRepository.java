@@ -75,7 +75,7 @@ public class BusinessRepository {
 		return c;
 	}
 
-	public DynamoDBMapper getMapper() {
+  public DynamoDBMapper getMapper() {
 		return mapper;
 	}
 

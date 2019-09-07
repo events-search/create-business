@@ -1,8 +1,8 @@
 package com.event.business.controller;
 
 import java.util.List;
-import java.util.Map;
 
+import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +57,5 @@ public class CreateBusinessController {
 		return new ResponseEntity<>(repository.getObject(businessDetails), HttpStatus.OK);
 
 	}
-
 
 }
