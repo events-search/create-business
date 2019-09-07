@@ -1,4 +1,4 @@
-package com.event.business.util;
+package com.event.business.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
