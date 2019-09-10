@@ -2,6 +2,7 @@ package com.event.business.controller;
 
 import java.util.List;
 
+import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,35 +18,44 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.event.business.model.BusinessDetails;
 import com.event.business.util.BusinessRepository;
+import com.event.business.util.ConfigurationService;
 
 @RestController
 public class CreateBusinessController {
-	
+
 	@Autowired
 	private BusinessRepository repository;
-	
+
 	@PostMapping(path = "/business")
 	public ResponseEntity<BusinessDetails> persistBusiness(@Valid @RequestBody BusinessDetails businessDetails) {
 		return new ResponseEntity<>(repository.insertIntoDB(businessDetails), HttpStatus.CREATED);
 	}
-	
+
 	@PutMapping(path = "/business")
 	public ResponseEntity<BusinessDetails> updateBusiness(@Valid @RequestBody BusinessDetails businessDetails) {
-		if(!StringUtils.isEmpty(businessDetails.getBusinessId())) {
-			return new ResponseEntity<>(repository.updateIntoDB(businessDetails, businessDetails.getBusinessId()), HttpStatus.OK);
-		}else {
+		if (!StringUtils.isEmpty(businessDetails.getBusinessId())) {
+			return new ResponseEntity<>(repository.updateIntoDB(businessDetails, businessDetails.getBusinessId()),
+					HttpStatus.OK);
+		} else {
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 	@GetMapping(path = "/business/{business_id}")
-	public ResponseEntity<BusinessDetails> getBusinessById(@PathVariable(value="business_id", required=true) String businessId  ) {
+	public ResponseEntity<BusinessDetails> getBusinessById(
+			@PathVariable(value = "business_id", required = true) String businessId) {
 		return new ResponseEntity<>(repository.getById(businessId), HttpStatus.OK);
-	 }
-	
+	}
+
 	@GetMapping(path = "/business")
 	public ResponseEntity<List<BusinessDetails>> getBusiness() {
-		  return new ResponseEntity<>(repository.getAll(), HttpStatus.OK);
-	 }
-	
+		return new ResponseEntity<>(repository.getAll(), HttpStatus.OK);
+	}
+
+	@PostMapping(path = "/business/search")
+	public ResponseEntity<List<BusinessDetails>> getSearchBusiness(@RequestBody BusinessDetails businessDetails) {
+		return new ResponseEntity<>(repository.getObject(businessDetails), HttpStatus.OK);
+
+	}
+
 }

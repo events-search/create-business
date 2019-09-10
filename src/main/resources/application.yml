@@ -19,9 +19,90 @@ info:
     version: @project.version@
     encoding: @project.build.sourceEncoding@
     java:
-      version: @java.version@  
+      version: @java.version@ 
+elasticsearch:
+  host: https://search-eventsearch-322ag35wzphbxnb3mupcalgxk4.us-east-2.es.amazonaws.com      
 services:
   offered:
-    DJ: DJ
-    CATERING: CATERING
-          
+    space providers:
+      - hotels/largy
+      - Resorts
+      - Formhouse
+    Pandith Service:
+      - wedding
+      - funeral     
+    Fashion:
+      - bride dress designers
+      - groom dress designers
+      - all types of clothing stores
+      - footwear stores
+      - jewelry stores
+      - cosmetic stores
+      - fashion designers
+    gifting and printing services:
+      - gift shops
+      - wedding card printers
+      - handloom gift item makers	
+    matrimonial services:
+    catering services:
+      - with food
+      - only catering boys
+    event organisers:
+      - All types of events or
+    beauty services:
+      - beauty parlours for both men and women
+      - individual beauticians
+    bakers:
+      - specialist for birthday cakes
+      - specialist for wedding cakes
+      - all type of bakery services
+    band baaja services:
+      - DJ
+      - sunny Mela services
+      - Bharat bandh services
+    photography section:
+    security services:
+    kidsone:
+      - magicians
+      - gaming equipment providers
+    housekeeping services:
+    transportation:
+      - Packers and movers
+      
+configuration:
+  serviceTypes:
+    STORAGESPACEPROVIDERS : STORAGE SPACE PROVIDERS
+    PANDITHSERVICES : PANDITH SERVICES
+    FASHIONDESIGNERSERVICES : FASHION DESIGNER SERVICES
+    FLEXIPRINTINGSERVICES : FLEXI PRINTING SERVICES
+    GIFTSSHOP : GIFTS SHOP
+    MATRIMONIALSERVICES : MATRIMONIAL SERVICES
+    EVENTORGANIZERS : EVENT ORGANIZERS
+    JEWELRYSTORES : JEWELRY STORES
+    BRIDALBEAUTYPRODUCTS : BRIDAL BEAUTY PRODUCTS
+    ACOUSTICSINGERSBANDS : ACOUSTICS INGERSBANDS
+    BRIDALHAIRCARE : BRIDAL HAIRCARE
+    BRIDALSKINCARE : BRIDAL SKINCARE
+    CAKESBAKES : CAKES BAKES
+    CATERING : CATERING
+    GENERALCLEANINGSERVICES : GENERAL CLEANING SERVICES
+    CORPORATEEVENTVENUE : CORPORATE EVENTVENUE
+    DJSENTERTAINMENTAGENCY : DJS ENTERTAINMENT AGENCY
+    EVENTPHOTOGRAPHY : EVENT PHOTOGRAPHY
+    EVENTSECURITY : EVENT SECURITY
+    FOODTRUCK : FOODTRUCK
+    GRAPHICDESIGNER : GRAPHIC DESIGNER
+    FIREWORKS : FIREWORKS
+    INVITATIONCARDPRINT : INVITATION CARDPRINT
+    KIDSPARTYHOST : KIDS PARTY HOST
+    MAGICIANS : MAGICIANS
+    MOBILEBAR : MOBILE BAR
+    ARTYEVENTCLEANING : PARTY EVENT CLEANING
+    PETSITTING : PETSITTING
+    WEDDINGPHOTOGRAPHY : WEDDING PHOTOGRAPHY
+    WEDDINGTRANSPORTATION : WEDDING TRANSPORTATION
+    WEDDINGVENUES : WEDDING VENUES
+    WEDDINGSEVENTFLORISTS : WEDDINGS EVENT FLORISTS
+  mobileTypes:
+    PRIMARY: PRIMARY
+    SECONDARY: SECONDARY   
