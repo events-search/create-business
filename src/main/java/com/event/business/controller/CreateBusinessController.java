@@ -1,10 +1,11 @@
 package com.event.business.controller;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import java.util.Map;
 import javax.validation.Valid;
 
+import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.event.business.model.BusinessDetails;
 import com.event.business.util.BusinessRepository;
-import com.event.business.util.ConfigurationService;
+import com.event.business.util.MyBeanUtils;
 
 @RestController
 public class CreateBusinessController {
@@ -32,14 +32,25 @@ public class CreateBusinessController {
 	}
 
 	@PutMapping(path = "/business")
-	public ResponseEntity<BusinessDetails> updateBusiness(@Valid @RequestBody BusinessDetails businessDetails) {
+	public ResponseEntity<BusinessDetails> updateBusiness(@RequestBody BusinessDetails businessDetails) {
 		if (!StringUtils.isEmpty(businessDetails.getBusinessId())) {
-			return new ResponseEntity<>(repository.updateIntoDB(businessDetails, businessDetails.getBusinessId()),
+			return new ResponseEntity<>(repository.updateIntoDB(getUpdatedBusiness(businessDetails), businessDetails.getBusinessId()),
 					HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	private BusinessDetails getUpdatedBusiness(BusinessDetails businessDetails) {
+		BusinessDetails businessDetailsObj = repository.getById(businessDetails.getBusinessId());
+		try {
+			MyBeanUtils.copyPropertiesNotNull(businessDetailsObj, businessDetails);
+		} catch (InvocationTargetException | IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return businessDetailsObj;
+		}
 
 	@GetMapping(path = "/business/{business_id}")
 	public ResponseEntity<BusinessDetails> getBusinessById(

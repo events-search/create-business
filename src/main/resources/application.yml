@@ -106,3 +106,5 @@ configuration:
   mobileTypes:
     PRIMARY: PRIMARY
     SECONDARY: SECONDARY   
+    
+          
