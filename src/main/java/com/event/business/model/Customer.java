@@ -106,16 +106,7 @@ public class Customer implements Serializable {
 	public void setCustomerDescription(String customerDescription) {
 		this.customerDescription = customerDescription;
 	}
-
-	@DynamoDBAttribute
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
+	
 	@DynamoDBAttribute
 	public String getPassword() {
 		return password;
