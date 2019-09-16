@@ -272,5 +272,4 @@ public class BusinessDetails implements Serializable {
 	public void setSecondaryAddress(Address secondaryAddress) {
 		this.secondaryAddress = secondaryAddress;
 	}
-
 }

@@ -54,7 +54,7 @@ public class BusinessRepository {
 		}
 		
 		return result;
-	}
+}
 
 	private DynamoDBScanExpression getBusinessScanner(BusinessDetails businessDetails) {
 		Map<String, Condition> filters = new HashMap<>();
