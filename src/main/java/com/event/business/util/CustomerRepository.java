@@ -6,12 +6,13 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBScanExpression;
-import com.amazonaws.services.dynamodbv2.datamodeling.PaginatedQueryList;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
+import com.amazonaws.services.dynamodbv2.model.Condition;
 import com.event.business.model.Customer;
 
 @Repository
@@ -47,12 +48,29 @@ public class CustomerRepository {
 		return mapper.scan(Customer.class, new DynamoDBScanExpression());
 	}
 
-	public PaginatedQueryList<Customer> search(String emailId) {
-		Map<String, AttributeValue> expectedAttribute = new HashMap<>();
-		expectedAttribute.put(":emailId", new AttributeValue(emailId));
-		DynamoDBQueryExpression<Customer> dbQExp = new DynamoDBQueryExpression<>();
-		dbQExp.setFilterExpression("emailId = :emailId");
-  	return this.mapper.query(Customer.class, dbQExp);
+	public List<Customer> getObject(Customer customer) {
+		List<Customer> result = mapper.scan(Customer.class, getCustomerScanner(customer));
+		return result;
 	}
+	
+	private DynamoDBScanExpression getCustomerScanner(Customer customer) {
+		Map<String, Condition> filters = new HashMap<>();
+		DynamoDBScanExpression scanner = new DynamoDBScanExpression();
+		if (!StringUtils.isEmpty(customer.getUserName())) {
+			filters.put("userName", getCondition(customer.getUserName()));
+		}
+		
+		scanner.setScanFilter(filters);
+		return scanner;
+	}
+	
+	private Condition getCondition(String val) {
+		Condition c = new Condition();
+		c.withComparisonOperator(ComparisonOperator.EQ);
+		c.withAttributeValueList(new AttributeValue().withS(val));
+		return c;
+	}
+
+
 
 }
