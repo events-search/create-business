@@ -3,6 +3,8 @@ package com.event.business.controller;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +28,7 @@ public class CustomerController {
 	private CustomerRepository repository;
 
 	@PostMapping(path = "/customer")
-	public ResponseEntity<Customer> persistBusiness(@RequestBody Customer customer) {
+	public ResponseEntity<Customer> persistBusiness(@Valid @RequestBody Customer customer) {
 		return new ResponseEntity<>(repository.insertIntoDB(customer), HttpStatus.CREATED);
 	}
 
