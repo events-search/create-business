@@ -3,7 +3,6 @@ package com.event.business.util;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,22 +44,26 @@ public class BusinessRepository {
 
 	public List<BusinessDetails> getObject(BusinessDetails businessDetails) {
 		List<BusinessDetails> result = mapper.scan(BusinessDetails.class, getBusinessScanner(businessDetails));
-		if(!CollectionUtils.isEmpty(businessDetails.getServicesProvided())) {
-			result = result.stream()
-				    .filter(p -> p.getServicesProvided().stream()
-		                    .map(s -> s.getServiceName())
-		                    .anyMatch(x -> businessDetails.getServicesProvided().stream().anyMatch(b -> b.getServiceName().equals(x))))
-		            .collect(Collectors.toList());
+		if (!CollectionUtils.isEmpty(businessDetails.getServicesProvided())) {
+			result = result.stream().filter(p -> p.getServicesProvided().stream().map(s -> s.getServiceName()).anyMatch(
+					x -> businessDetails.getServicesProvided().stream().anyMatch(b -> b.getServiceName().equals(x))))
+					.collect(Collectors.toList());
 		}
-		
+
 		return result;
-}
+	}
 
 	private DynamoDBScanExpression getBusinessScanner(BusinessDetails businessDetails) {
 		Map<String, Condition> filters = new HashMap<>();
 		DynamoDBScanExpression scanner = new DynamoDBScanExpression();
 		if (!StringUtils.isEmpty(businessDetails.getCountry())) {
 			filters.put("country", getCondition(businessDetails.getCountry()));
+		}
+		if (!StringUtils.isEmpty(businessDetails.getCountry())) {
+			filters.put("userName", getCondition(businessDetails.getUserName()));
+		}
+		if (!StringUtils.isEmpty(businessDetails.getCountry())) {
+			filters.put("password", getCondition(businessDetails.getPassword()));
 		}
 		if (!StringUtils.isEmpty(businessDetails.getBusinessType())) {
 			filters.put("businessType", getCondition(businessDetails.getBusinessType()));
@@ -86,7 +89,7 @@ public class BusinessRepository {
 		return c;
 	}
 
-  public DynamoDBMapper getMapper() {
+	public DynamoDBMapper getMapper() {
 		return mapper;
 	}
 

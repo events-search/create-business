@@ -3,6 +3,9 @@ package com.event.business.model;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.validation.constraints.Pattern;
+
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
@@ -24,7 +27,11 @@ public class BusinessDetails implements Serializable {
 	@NotEmpty(message = "businessType is mandatory")
 	private String businessType;
 
-	private Phone phone;
+	@Pattern(regexp="(^$|[0-9] {10})")
+	private String primaryPhoneNumber;
+	
+	@Pattern(regexp="($[0-9] {10})")
+	private String SecondaryPhoneNumber;
 
 	@NotEmpty(message = "UserName is mandatory")
 	private String userName;
@@ -36,6 +43,7 @@ public class BusinessDetails implements Serializable {
 	private String lastName;
 
 	@NotEmpty(message = "email is mandatory")
+	@Email
 	private String email;
 
 	@NotEmpty(message = "websiteUrl is mandatory")
@@ -109,13 +117,23 @@ public class BusinessDetails implements Serializable {
 	public void setBusinessType(String businessType) {
 		this.businessType = businessType;
 	}
-
-	public Phone getPhone() {
-		return phone;
+	
+	@DynamoDBAttribute
+	public String getPrimaryPhoneNumber() {
+		return primaryPhoneNumber;
 	}
 
-	public void setPhone(Phone phone) {
-		this.phone = phone;
+	public void setPrimaryPhoneNumber(String primaryPhoneNumber) {
+		this.primaryPhoneNumber = primaryPhoneNumber;
+	}
+
+	@DynamoDBAttribute
+	public String getSecondaryPhoneNumber() {
+		return SecondaryPhoneNumber;
+	}
+
+	public void setSecondaryPhoneNumber(String secondaryPhoneNumber) {
+		SecondaryPhoneNumber = secondaryPhoneNumber;
 	}
 
 	@DynamoDBAttribute
