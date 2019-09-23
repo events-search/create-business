@@ -354,7 +354,7 @@ public class BusinessDetails implements Serializable {
 		return secondary_country;
 	}
 
-	public void setSecondary_country(String secondary_country) {
+  public void setSecondary_country(String secondary_country) {
 		this.secondary_country = secondary_country;
 	}
 	
