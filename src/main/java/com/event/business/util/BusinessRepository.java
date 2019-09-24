@@ -59,10 +59,10 @@ public class BusinessRepository {
 		if (!StringUtils.isEmpty(businessDetails.getCountry())) {
 			filters.put("country", getCondition(businessDetails.getCountry()));
 		}
-		if (!StringUtils.isEmpty(businessDetails.getCountry())) {
+		if (!StringUtils.isEmpty(businessDetails.getUserName())) {
 			filters.put("userName", getCondition(businessDetails.getUserName()));
 		}
-		if (!StringUtils.isEmpty(businessDetails.getCountry())) {
+		if (!StringUtils.isEmpty(businessDetails.getPassword())) {
 			filters.put("password", getCondition(businessDetails.getPassword()));
 		}
 		if (!StringUtils.isEmpty(businessDetails.getBusinessType())) {

@@ -34,7 +34,7 @@ public class CustomerController {
 	Logger logger = LoggerFactory.getLogger(CustomerController.class);
 
 	@PostMapping(path = "/customer")
-	public ResponseEntity<Customer> persistBusiness(@Valid @RequestBody Customer customer) throws Exception {
+	public ResponseEntity<Customer> persistCustomer(@Valid @RequestBody Customer customer) throws Exception {
 		if (isUserNameExists(customer.getUserName(), null)) {
 			return new ResponseEntity<>(repository.insertIntoDB(customer), HttpStatus.CREATED);
 		} else {
@@ -44,7 +44,7 @@ public class CustomerController {
 	}
 
 	@PutMapping(path = "/customer")
-	public ResponseEntity<Customer> updateBusiness(@RequestBody Customer customer) throws Exception {
+	public ResponseEntity<Customer> updateCustomer(@RequestBody Customer customer) throws Exception {
 		if (!StringUtils.isEmpty(customer.getCustomerId())) {
 			if (!StringUtils.isEmpty(customer.getUserName())) {
 				if (!isUserNameExists(customer.getUserName(), customer.getCustomerId())) {
