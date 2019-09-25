@@ -3,7 +3,6 @@ package com.event.business.util;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,34 +44,38 @@ public class BusinessRepository {
 
 	public List<BusinessDetails> getObject(BusinessDetails businessDetails) {
 		List<BusinessDetails> result = mapper.scan(BusinessDetails.class, getBusinessScanner(businessDetails));
-		if(!CollectionUtils.isEmpty(businessDetails.getServicesProvided())) {
-			result = result.stream()
-				    .filter(p -> p.getServicesProvided().stream()
-		                    .map(s -> s.getServiceName())
-		                    .anyMatch(x -> businessDetails.getServicesProvided().stream().anyMatch(b -> b.getServiceName().equals(x))))
-		            .collect(Collectors.toList());
+		if (!CollectionUtils.isEmpty(businessDetails.getServicesProvided())) {
+			result = result.stream().filter(p -> p.getServicesProvided().stream().map(s -> s.getServiceName()).anyMatch(
+					x -> businessDetails.getServicesProvided().stream().anyMatch(b -> b.getServiceName().equals(x))))
+					.collect(Collectors.toList());
 		}
-		
+
 		return result;
-}
+	}
 
 	private DynamoDBScanExpression getBusinessScanner(BusinessDetails businessDetails) {
 		Map<String, Condition> filters = new HashMap<>();
 		DynamoDBScanExpression scanner = new DynamoDBScanExpression();
-		if (!StringUtils.isEmpty(businessDetails.getCountry())) {
-			filters.put("country", getCondition(businessDetails.getCountry()));
+		if (!StringUtils.isEmpty(businessDetails.getPrimaryCountry())) {
+			filters.put("primaryCountry", getCondition(businessDetails.getPrimaryCountry()));
+		}
+		if (!StringUtils.isEmpty(businessDetails.getUserName())) {
+			filters.put("userName", getCondition(businessDetails.getUserName()));
+		}
+		if (!StringUtils.isEmpty(businessDetails.getPassword())) {
+			filters.put("password", getCondition(businessDetails.getPassword()));
 		}
 		if (!StringUtils.isEmpty(businessDetails.getBusinessType())) {
 			filters.put("businessType", getCondition(businessDetails.getBusinessType()));
 		}
-		if (!StringUtils.isEmpty(businessDetails.getCity())) {
-			filters.put("city", getCondition(businessDetails.getCity()));
+		if (!StringUtils.isEmpty(businessDetails.getPrimaryCity())) {
+			filters.put("primaryCity", getCondition(businessDetails.getPrimaryCity()));
 		}
-		if (!StringUtils.isEmpty(businessDetails.getState())) {
-			filters.put("state", getCondition(businessDetails.getState()));
+		if (!StringUtils.isEmpty(businessDetails.getPrimaryState())) {
+			filters.put("primaryState", getCondition(businessDetails.getPrimaryState()));
 		}
-		if (!StringUtils.isEmpty(businessDetails.getZipCode())) {
-			filters.put("zipCode", getCondition(businessDetails.getZipCode()));
+		if (!StringUtils.isEmpty(businessDetails.getPrimaryZipCode())) {
+			filters.put("PrimaryZipCode", getCondition(businessDetails.getPrimaryZipCode()));
 		}
 
 		scanner.setScanFilter(filters);
@@ -86,7 +89,7 @@ public class BusinessRepository {
 		return c;
 	}
 
-  public DynamoDBMapper getMapper() {
+	public DynamoDBMapper getMapper() {
 		return mapper;
 	}
 

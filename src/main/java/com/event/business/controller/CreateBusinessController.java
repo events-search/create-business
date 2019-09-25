@@ -3,9 +3,10 @@ package com.event.business.controller;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import java.util.Map;
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.event.business.model.BusinessDetails;
+import com.event.business.model.LoginDetails;
 import com.event.business.util.BusinessRepository;
+import com.event.business.util.EventUtil;
 import com.event.business.util.MyBeanUtils;
 
 @RestController
@@ -27,15 +30,30 @@ public class CreateBusinessController {
 
 	@Autowired
 	private BusinessRepository repository;
+	
+	 Logger logger = LoggerFactory.getLogger(CreateBusinessController.class);
 
 	@PostMapping(path = "/business")
-	public ResponseEntity<BusinessDetails> persistBusiness(@Valid @RequestBody BusinessDetails businessDetails) {
-		return new ResponseEntity<>(repository.insertIntoDB(businessDetails), HttpStatus.CREATED);
+	public ResponseEntity<BusinessDetails> persistBusiness(@Valid @RequestBody BusinessDetails businessDetails)
+			throws Exception {
+		if (isUserNameExists(businessDetails.getUserName(), null)) {
+			return new ResponseEntity<>(repository.insertIntoDB(businessDetails), HttpStatus.CREATED);
+		} else {
+			logger.debug("UserName Already Exists");
+			throw new Exception("UserName Already Exists");
+		}
 	}
 
 	@PutMapping(path = "/business")
-	public ResponseEntity<BusinessDetails> updateBusiness(@RequestBody BusinessDetails businessDetails) {
+	public ResponseEntity<BusinessDetails> updateBusiness(@RequestBody BusinessDetails businessDetails)
+			throws Exception {
 		if (!StringUtils.isEmpty(businessDetails.getBusinessId())) {
+			if (!StringUtils.isEmpty(businessDetails.getUserName())) {
+				if (!isUserNameExists(businessDetails.getUserName(), businessDetails.getBusinessId())) {
+					logger.debug("UserName Already Exists");
+					throw new Exception("UserName Already Exists");					
+				}
+			}
 			return new ResponseEntity<>(
 					repository.updateIntoDB(getUpdatedBusiness(businessDetails), businessDetails.getBusinessId()),
 					HttpStatus.OK);
@@ -50,6 +68,7 @@ public class CreateBusinessController {
 			MyBeanUtils.copyPropertiesNotNull(businessDetailsObj, businessDetails);
 		} catch (InvocationTargetException | IllegalAccessException e) {
 			// TODO Auto-generated catch block
+			logger.error("Exception while copying properties", e);
 			e.printStackTrace();
 		}
 		return businessDetailsObj;
@@ -69,6 +88,53 @@ public class CreateBusinessController {
 	@PostMapping(path = "/business/search")
 	public ResponseEntity<List<BusinessDetails>> getSearchBusiness(@RequestBody BusinessDetails businessDetails) {
 		return new ResponseEntity<>(repository.getObject(businessDetails), HttpStatus.OK);
+
+	}
+
+	private boolean isUserNameExists(String userName, String updateId) {
+		BusinessDetails customer = new BusinessDetails();
+		customer.setUserName(userName);
+		List<BusinessDetails> details = repository.getObject(customer);
+		if (CollectionUtils.isEmpty(details)) {
+			return true;
+		} else {
+			if (StringUtils.isEmpty(updateId)) {
+				return false;
+			} else {
+				if (details.size() == 1) {
+					return details.get(0).getBusinessId().equals(updateId);
+				} else {
+					return false;
+				}
+			}
+		}
+
+	}
+
+	private BusinessDetails map(LoginDetails loginDetails) {
+		BusinessDetails businessObj = new BusinessDetails();
+		businessObj.setUserName(loginDetails.getUserName());
+		businessObj.setPassword(loginDetails.getPassword());
+		return businessObj;
+
+	}
+
+	@PostMapping(path = "/business/login")
+	public ResponseEntity<List<BusinessDetails>> getLoginDetails(@RequestBody LoginDetails loginDetails)
+			throws Exception {
+		if (!EventUtil.validateLoginDetails(loginDetails)) {
+			throw new Exception("Username / Password  is missing");
+		} else {
+			List<BusinessDetails> details = repository.getObject(map(loginDetails));
+			if (CollectionUtils.isEmpty(details)) {
+				throw new Exception("Invalid UserName / Password ");
+			} else if (details.size() > 1) {
+				throw new Exception("Multiple users exists ");
+			} else {
+				return new ResponseEntity<>(details, HttpStatus.OK);
+			}
+
+		}
 
 	}
 

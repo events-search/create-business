@@ -59,6 +59,9 @@ public class CustomerRepository {
 		if (!StringUtils.isEmpty(customer.getUserName())) {
 			filters.put("userName", getCondition(customer.getUserName()));
 		}
+		if (!StringUtils.isEmpty(customer.getPassword())) {
+			filters.put("password", getCondition(customer.getPassword()));
+		}	
 		
 		scanner.setScanFilter(filters);
 		return scanner;

@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +20,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.event.business.model.Customer;
+import com.event.business.model.LoginDetails;
 import com.event.business.util.CustomerRepository;
+import com.event.business.util.EventUtil;
 import com.event.business.util.MyBeanUtils;
 
 @RestController
@@ -26,15 +30,28 @@ public class CustomerController {
 
 	@Autowired
 	private CustomerRepository repository;
+	
+	Logger logger = LoggerFactory.getLogger(CustomerController.class);
 
 	@PostMapping(path = "/customer")
-	public ResponseEntity<Customer> persistBusiness(@Valid @RequestBody Customer customer) {
-		return new ResponseEntity<>(repository.insertIntoDB(customer), HttpStatus.CREATED);
+	public ResponseEntity<Customer> persistCustomer(@Valid @RequestBody Customer customer) throws Exception {
+		if (isUserNameExists(customer.getUserName(), null)) {
+			return new ResponseEntity<>(repository.insertIntoDB(customer), HttpStatus.CREATED);
+		} else {
+			logger.debug("UserName Already Exists");
+			throw new Exception("UserName Already Exists");
+		}
 	}
 
 	@PutMapping(path = "/customer")
-	public ResponseEntity<Customer> updateBusiness(@RequestBody Customer customer) {
+	public ResponseEntity<Customer> updateCustomer(@RequestBody Customer customer) throws Exception {
 		if (!StringUtils.isEmpty(customer.getCustomerId())) {
+			if (!StringUtils.isEmpty(customer.getUserName())) {
+				if (!isUserNameExists(customer.getUserName(), customer.getCustomerId())) {
+					throw new Exception("UserName Already Exists");
+				}
+			}
+
 			return new ResponseEntity<>(repository.updateIntoDB(getUpdatedCustomer(customer), customer.getCustomerId()),
 					HttpStatus.OK);
 		} else {
@@ -80,6 +97,52 @@ public class CustomerController {
 			throw new Exception("multiple customer exists with username: " + userName);
 		}
 		return new ResponseEntity<>(customerList.get(0), HttpStatus.OK);
+	}
+
+	private Customer map(LoginDetails loginDetails) {
+		Customer customer = new Customer();
+		customer.setUserName(loginDetails.getUserName());
+		customer.setPassword(loginDetails.getPassword());
+		return customer;
+
+	}
+
+	private boolean isUserNameExists(String userName, String updateId) {
+		Customer customer = new Customer();
+		customer.setUserName(userName);
+		List<Customer> details = repository.getObject(customer);
+		if (CollectionUtils.isEmpty(details)) {
+			return true;
+		} else {
+			if (StringUtils.isEmpty(updateId)) {
+				return false;
+			} else {
+				if (details.size() == 1) {
+					return details.get(0).getCustomerId().equals(updateId);
+				} else {
+					return false;
+				}
+			}
+		}
+
+	}
+
+	@PostMapping(path = "/customer/login")
+	public ResponseEntity<List<Customer>> getLoginDetails(@RequestBody LoginDetails loginDetails) throws Exception {
+		if (!EventUtil.validateLoginDetails(loginDetails)) {
+			throw new Exception("Username / Password  is missing");
+		} else {
+			List<Customer> details = repository.getObject(map(loginDetails));
+			if (CollectionUtils.isEmpty(details)) {
+				throw new Exception("Invalid UserName / Password ");
+			} else if (details.size() > 1) {
+				throw new Exception("Multiple users exists ");
+			} else {
+				return new ResponseEntity<>(details, HttpStatus.OK);
+			}
+
+		}
+
 	}
 
 }
