@@ -56,8 +56,8 @@ public class BusinessRepository {
 	private DynamoDBScanExpression getBusinessScanner(BusinessDetails businessDetails) {
 		Map<String, Condition> filters = new HashMap<>();
 		DynamoDBScanExpression scanner = new DynamoDBScanExpression();
-		if (!StringUtils.isEmpty(businessDetails.getCountry())) {
-			filters.put("country", getCondition(businessDetails.getCountry()));
+		if (!StringUtils.isEmpty(businessDetails.getPrimaryCountry())) {
+			filters.put("primaryCountry", getCondition(businessDetails.getPrimaryCountry()));
 		}
 		if (!StringUtils.isEmpty(businessDetails.getUserName())) {
 			filters.put("userName", getCondition(businessDetails.getUserName()));
@@ -68,14 +68,14 @@ public class BusinessRepository {
 		if (!StringUtils.isEmpty(businessDetails.getBusinessType())) {
 			filters.put("businessType", getCondition(businessDetails.getBusinessType()));
 		}
-		if (!StringUtils.isEmpty(businessDetails.getCity())) {
-			filters.put("city", getCondition(businessDetails.getCity()));
+		if (!StringUtils.isEmpty(businessDetails.getPrimaryCity())) {
+			filters.put("primaryCity", getCondition(businessDetails.getPrimaryCity()));
 		}
-		if (!StringUtils.isEmpty(businessDetails.getState())) {
-			filters.put("state", getCondition(businessDetails.getState()));
+		if (!StringUtils.isEmpty(businessDetails.getPrimaryState())) {
+			filters.put("primaryState", getCondition(businessDetails.getPrimaryState()));
 		}
-		if (!StringUtils.isEmpty(businessDetails.getZipCode())) {
-			filters.put("zipCode", getCondition(businessDetails.getZipCode()));
+		if (!StringUtils.isEmpty(businessDetails.getPrimaryZipCode())) {
+			filters.put("PrimaryZipCode", getCondition(businessDetails.getPrimaryZipCode()));
 		}
 
 		scanner.setScanFilter(filters);
