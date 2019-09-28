@@ -422,7 +422,5 @@ public class BusinessDetails implements Serializable {
 		this.reviews = reviews;
 	}
 	
-	
-		
 
 }
