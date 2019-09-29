@@ -29,6 +29,7 @@ public class Reviews implements Serializable {
 		this.reviewList = reviewList;
 	}
 
+	@DynamoDBAttribute
 	public Double getAverage() {
 		return average;
 	}
@@ -37,6 +38,7 @@ public class Reviews implements Serializable {
 		this.average = average;
 	}
 
+	@DynamoDBAttribute
 	public int getNoOfReviews() {
 		return noOfReviews;
 	}
