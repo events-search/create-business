@@ -14,18 +14,12 @@ public class Reviews implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private String average;
+	private Double average;
+	
+	private int noOfReviews;
 
 	private List<Review> reviewList;
 
-	@DynamoDBAttribute
-	public String getAverage() {
-		return average;
-	}
-
-	public void setAverage(String average) {
-		this.average = average;
-	}
 	
 	public List<Review> getReviewList() {
 		return reviewList;
@@ -35,4 +29,21 @@ public class Reviews implements Serializable {
 		this.reviewList = reviewList;
 	}
 
+	public Double getAverage() {
+		return average;
+	}
+
+	public void setAverage(Double average) {
+		this.average = average;
+	}
+
+	public int getNoOfReviews() {
+		return noOfReviews;
+	}
+
+	public void setNoOfReviews(int noOfReviews) {
+		this.noOfReviews = noOfReviews;
+	}
+	
 }
+

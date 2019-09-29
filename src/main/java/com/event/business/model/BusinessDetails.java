@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Email;
 
@@ -413,7 +412,6 @@ public class BusinessDetails implements Serializable {
 		this.secondaryPhoneNumber = secondaryPhoneNumber;
 	}
 
-	
 	public Reviews getReviews() {
 		return reviews;
 	}
@@ -421,6 +419,5 @@ public class BusinessDetails implements Serializable {
 	public void setReviews(Reviews reviews) {
 		this.reviews = reviews;
 	}
-	
 
 }

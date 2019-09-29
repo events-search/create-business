@@ -1,7 +1,9 @@
 package com.event.business.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -21,6 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.event.business.model.BusinessDetails;
 import com.event.business.model.LoginDetails;
+import com.event.business.model.Review;
+import com.event.business.model.Reviews;
 import com.event.business.util.BusinessRepository;
 import com.event.business.util.EventUtil;
 import com.event.business.util.MyBeanUtils;
@@ -30,8 +34,8 @@ public class CreateBusinessController {
 
 	@Autowired
 	private BusinessRepository repository;
-	
-	 Logger logger = LoggerFactory.getLogger(CreateBusinessController.class);
+
+	Logger logger = LoggerFactory.getLogger(CreateBusinessController.class);
 
 	@PostMapping(path = "/business")
 	public ResponseEntity<BusinessDetails> persistBusiness(@Valid @RequestBody BusinessDetails businessDetails)
@@ -51,7 +55,7 @@ public class CreateBusinessController {
 			if (!StringUtils.isEmpty(businessDetails.getUserName())) {
 				if (!isUserNameExists(businessDetails.getUserName(), businessDetails.getBusinessId())) {
 					logger.debug("UserName Already Exists");
-					throw new Exception("UserName Already Exists");					
+					throw new Exception("UserName Already Exists");
 				}
 			}
 			return new ResponseEntity<>(
@@ -74,10 +78,62 @@ public class CreateBusinessController {
 		return businessDetailsObj;
 	}
 
+	private BusinessDetails getAddBusinessReviews(Review review, String businessId) {
+		BusinessDetails businessDetailsObj = repository.getById(businessId);
+		if (null == businessDetailsObj.getReviews()) {
+			Reviews r = new Reviews();
+			List<Review> reviewList = new ArrayList<Review>();
+			reviewList.add(review);
+			r.setReviewList(reviewList);
+			r.setAverage(Double.valueOf(review.getRating()));
+			r.setNoOfReviews(1);
+			businessDetailsObj.setReviews(r);
+		} else if (CollectionUtils.isEmpty(businessDetailsObj.getReviews().getReviewList())) {
+			List<Review> reviewList = new ArrayList<Review>();
+			reviewList.add(review);
+			businessDetailsObj.getReviews().setAverage(Double.valueOf(review.getRating()));
+			businessDetailsObj.getReviews().setNoOfReviews(1);
+			businessDetailsObj.getReviews().setReviewList(reviewList);
+		} else {
+			businessDetailsObj.getReviews().getReviewList().add(review);
+		    Double avg = businessDetailsObj.getReviews().getReviewList().stream().collect(Collectors.averagingDouble(r -> r.getRating()));
+			businessDetailsObj.getReviews().setAverage(avg);
+			businessDetailsObj.getReviews().setNoOfReviews(businessDetailsObj.getReviews().getReviewList().size());
+			
+		}
+		return businessDetailsObj;
+	}
+
 	@GetMapping(path = "/business/{business_id}")
 	public ResponseEntity<BusinessDetails> getBusinessById(
 			@PathVariable(value = "business_id", required = true) String businessId) {
 		return new ResponseEntity<>(repository.getById(businessId), HttpStatus.OK);
+	}
+
+	@PutMapping(path = "/business/{business_id}/review")
+	public ResponseEntity<Reviews> getReviewsByBusinessId(
+			@PathVariable(value = "business_id", required = true) String businessId, @RequestBody Review review) throws Exception {
+		//validate review object
+		validateReview(review);
+		//if required to verify customer is valid.
+		// need to validate customer used business service (associated with business id)
+		if (!StringUtils.isEmpty(businessId)) {
+			BusinessDetails obj = repository.updateIntoDB(getAddBusinessReviews(review,businessId), businessId);
+			if(null != obj) {
+			return new ResponseEntity<>(obj.getReviews(),HttpStatus.OK);
+			}else {
+				throw new Exception("Error occured while updating reviews");
+			}
+		} else {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+
+	}
+	
+	private void validateReview(Review review) throws Exception {
+		if(StringUtils.isEmpty(review.getCustomerFirstName()) || StringUtils.isEmpty(review.getCustomerLastName()) || null == review.getRating()) {
+		 throw new Exception("mandatory feilds are missing");	
+		}
 	}
 
 	@GetMapping(path = "/business")
@@ -89,6 +145,13 @@ public class CreateBusinessController {
 	public ResponseEntity<List<BusinessDetails>> getSearchBusiness(@RequestBody BusinessDetails businessDetails) {
 		return new ResponseEntity<>(repository.getObject(businessDetails), HttpStatus.OK);
 
+	}
+
+	@GetMapping(path = "/business/{business_id}/review")
+	public ResponseEntity<Reviews> updateReviewsByBusinessId(
+			@PathVariable(value = "business_id", required = true) String businessId) {
+		BusinessDetails businessDetails = repository.getById(businessId);
+		return new ResponseEntity<>(businessDetails.getReviews(), HttpStatus.OK);
 	}
 
 	private boolean isUserNameExists(String userName, String updateId) {

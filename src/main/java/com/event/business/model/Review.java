@@ -11,16 +11,16 @@ public class Review implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
-	private String rating;
+	private Integer rating;
 	private String description;
 	private String customerFirstName;
 	private String customerLastName;
 	
 	@DynamoDBAttribute
-	public String getRating() {
+	public Integer getRating() {
 		return rating;
 	}
-	public void setRating(String rating) {
+	public void setRating(Integer rating) {
 		this.rating = rating;
 	}
 	
