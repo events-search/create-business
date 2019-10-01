@@ -29,9 +29,17 @@ public class BusinessDetails implements Serializable {
 	@NotNull(message = "primaryPhoneNumber is mandatory")
 	private String primaryPhoneNumber;
 	
+	@NotNull(message = "primaryExtension is mandatory")
+	private String primaryExtension;
+	
+	
 	private String secondaryPhoneNumber;
 	
 	private String thirdPhoneNumber;
+	
+	private String secondaryExtension;
+	
+	private String thirdExtension;
 
 	@NotNull(message = "primaryPhoneType is mandatory")	
 	private String primaryPhoneType;
@@ -419,5 +427,34 @@ public class BusinessDetails implements Serializable {
 	public void setReviews(Reviews reviews) {
 		this.reviews = reviews;
 	}
+
+	@DynamoDBAttribute	
+	public String getPrimaryExtension() {
+		return primaryExtension;
+	}
+
+	public void setPrimaryExtension(String primaryExtension) {
+		this.primaryExtension = primaryExtension;
+	}
+
+	@DynamoDBAttribute
+	public String getSecondaryExtension() {
+		return secondaryExtension;
+	}
+
+	public void setSecondaryExtension(String secondaryExtension) {
+		this.secondaryExtension = secondaryExtension;
+	}
+
+	@DynamoDBAttribute
+	public String getThirdExtension() {
+		return thirdExtension;
+	}
+
+	public void setThirdExtension(String thirdExtension) {
+		this.thirdExtension = thirdExtension;
+	}
+	
+	
 
 }
