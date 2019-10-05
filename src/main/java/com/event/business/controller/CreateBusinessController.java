@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.event.business.model.BusinessDetails;
 import com.event.business.model.LoginDetails;
+import com.event.business.model.Rating;
 import com.event.business.util.BusinessRepository;
 import com.event.business.util.EventUtil;
 import com.event.business.util.MyBeanUtils;
@@ -30,8 +31,8 @@ public class CreateBusinessController {
 
 	@Autowired
 	private BusinessRepository repository;
-	
-	 Logger logger = LoggerFactory.getLogger(CreateBusinessController.class);
+
+	Logger logger = LoggerFactory.getLogger(CreateBusinessController.class);
 
 	@PostMapping(path = "/business")
 	public ResponseEntity<BusinessDetails> persistBusiness(@Valid @RequestBody BusinessDetails businessDetails)
@@ -51,7 +52,7 @@ public class CreateBusinessController {
 			if (!StringUtils.isEmpty(businessDetails.getUserName())) {
 				if (!isUserNameExists(businessDetails.getUserName(), businessDetails.getBusinessId())) {
 					logger.debug("UserName Already Exists");
-					throw new Exception("UserName Already Exists");					
+					throw new Exception("UserName Already Exists");
 				}
 			}
 			return new ResponseEntity<>(
@@ -74,10 +75,58 @@ public class CreateBusinessController {
 		return businessDetailsObj;
 	}
 
+	private BusinessDetails getAddBusinessReviews(String rating, String businessId) {
+		BusinessDetails businessDetailsObj = repository.getById(businessId);
+		if (null == businessDetailsObj.getRating() || businessDetailsObj.getRating().getNoOfReviews() == 0) {
+			Rating r = new Rating();
+			r.setAverageRating(Double.valueOf(rating));
+			r.setNoOfReviews(1);
+			businessDetailsObj.setRating(r);
+		} else {
+			int noReviews = businessDetailsObj.getRating().getNoOfReviews();
+			double avgRating = businessDetailsObj.getRating().getAverageRating();
+			double updatedRating = (avgRating * noReviews + Integer.valueOf(rating)) / (noReviews + 1);
+			businessDetailsObj.getRating().setAverageRating(updatedRating);
+			businessDetailsObj.getRating().setNoOfReviews(noReviews + 1);
+
+		}
+		return businessDetailsObj;
+	}
+
 	@GetMapping(path = "/business/{business_id}")
 	public ResponseEntity<BusinessDetails> getBusinessById(
 			@PathVariable(value = "business_id", required = true) String businessId) {
 		return new ResponseEntity<>(repository.getById(businessId), HttpStatus.OK);
+	}
+
+	@PutMapping(path = "/business/{business_id}/rating/{rating}")
+	public ResponseEntity<Rating> getReviewsByBusinessId(
+			@PathVariable(value = "business_id", required = true) String businessId,
+			@PathVariable(value = "rating", required = true) String rating) throws Exception {
+		// validate review object
+		validateRating(rating);
+		// if required to verify customer is valid.
+		// need to validate customer used business service (associated with business id)
+		if (!StringUtils.isEmpty(businessId)) {
+			BusinessDetails obj = repository.updateIntoDB(getAddBusinessReviews(rating, businessId), businessId);
+			if (null != obj) {
+				return new ResponseEntity<>(obj.getRating(), HttpStatus.OK);
+			} else {
+				throw new Exception("Error occured while updating reviews");
+			}
+		} else {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+
+	}
+
+	private int validateRating(String rating) throws Exception {
+		if (null != rating && rating.matches("[0-5]")) {
+			return Integer.parseInt(rating);
+		} else {
+			throw new Exception("Invalid rating must be digit and between (0-5) ");
+		}
+
 	}
 
 	@GetMapping(path = "/business")
@@ -89,6 +138,17 @@ public class CreateBusinessController {
 	public ResponseEntity<List<BusinessDetails>> getSearchBusiness(@RequestBody BusinessDetails businessDetails) {
 		return new ResponseEntity<>(repository.getObject(businessDetails), HttpStatus.OK);
 
+	}
+
+	@GetMapping(path = "/business/{business_id}/rating")
+	public ResponseEntity<Rating> updateReviewsByBusinessId(
+			@PathVariable(value = "business_id", required = true) String businessId) {
+		BusinessDetails businessDetails = repository.getById(businessId);
+		if (null == businessDetails.getRating()) {
+			return new ResponseEntity<>(businessDetails.getRating(), HttpStatus.NO_CONTENT);
+		} else {
+			return new ResponseEntity<>(businessDetails.getRating(), HttpStatus.OK);
+		}
 	}
 
 	private boolean isUserNameExists(String userName, String updateId) {

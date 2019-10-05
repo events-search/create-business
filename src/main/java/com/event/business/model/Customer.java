@@ -20,14 +20,17 @@ public class Customer implements Serializable {
 	
 	private String customerId;
 
-	@NotEmpty(message = "phone is mandatory")
-	private Phone phone;
+	@NotEmpty(message = "phoneNumber is mandatory")
+	private String phoneNumber;
+	
+	@NotEmpty(message = "extension is mandatory")
+	private String extension;	
 	
 	@NotEmpty(message = "userName is mandatory")
 	private String userName;
 	
-	@NotEmpty(message = "fistName is mandatory")
-	private String fistName;
+	@NotEmpty(message = "firstName is mandatory")
+	private String firstName;
 	
 	@NotEmpty(message = "lastName is mandatory")
 	private String lastName;
@@ -36,10 +39,7 @@ public class Customer implements Serializable {
 	private String email;
 	
 	private TransactionDetails transaction;
-
-	@NotEmpty(message = "customerDescription is mandatory")
-	private String customerDescription;
-
+	
 	@NotEmpty(message = "password is mandatory")
 	private String password;
 
@@ -52,15 +52,7 @@ public class Customer implements Serializable {
 	public void setCustomerId(String customerId) {
 		this.customerId = customerId;
 	}
-
-	public Phone getPhone() {
-		return phone;
-	}
-
-	public void setPhone(Phone phone) {
-		this.phone = phone;
-	}
-
+	
 	@DynamoDBAttribute
 	public String getUserName() {
 		return userName;
@@ -68,15 +60,6 @@ public class Customer implements Serializable {
 
 	public void setUserName(String userName) {
 		this.userName = userName;
-	}
-
-	@DynamoDBAttribute
-	public String getFistName() {
-		return fistName;
-	}
-
-	public void setFistName(String fistName) {
-		this.fistName = fistName;
 	}
 
 	@DynamoDBAttribute
@@ -104,15 +87,6 @@ public class Customer implements Serializable {
 	public void setTransaction(TransactionDetails transaction) {
 		this.transaction = transaction;
 	}
-
-	@DynamoDBAttribute
-	public String getCustomerDescription() {
-		return customerDescription;
-	}
-
-	public void setCustomerDescription(String customerDescription) {
-		this.customerDescription = customerDescription;
-	}
 	
 	@DynamoDBAttribute
 	public String getPassword() {
@@ -122,5 +96,34 @@ public class Customer implements Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	@DynamoDBAttribute
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	@DynamoDBAttribute
+	public String getExtension() {
+		return extension;
+	}
+
+	public void setExtension(String extension) {
+		this.extension = extension;
+	}
+
+	@DynamoDBAttribute
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+	
+	
 			
 }
