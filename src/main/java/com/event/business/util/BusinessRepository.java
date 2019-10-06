@@ -75,7 +75,7 @@ public class BusinessRepository {
 			filters.put("primaryState", getCondition(businessDetails.getPrimaryState()));
 		}
 		if (!StringUtils.isEmpty(businessDetails.getPrimaryZipCode())) {
-			filters.put("PrimaryZipCode", getCondition(businessDetails.getPrimaryZipCode()));
+			filters.put("primaryZipCode", getCondition(businessDetails.getPrimaryZipCode()));
 		}
 
 		scanner.setScanFilter(filters);
