@@ -458,7 +458,7 @@ public class BusinessDetails implements Serializable {
 		this.rating = rating;
 	}
 
-	@DynamoDBAttribute
+  @DynamoDBAttribute
 	public String getSecondaryAddressType() {
 		return secondaryAddressType;
 	}
@@ -475,7 +475,5 @@ public class BusinessDetails implements Serializable {
 	public void setThirdAddressType(String thirdAddressType) {
 		this.thirdAddressType = thirdAddressType;
 	}
-	
-	
-	
+		
 }

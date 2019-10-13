@@ -19,9 +19,8 @@ public class Customer implements Serializable {
 
 	@NotNull(message = "phoneNumber is mandatory")
 	private String phoneNumber;
-	
-	@NotNull(message = "extension is mandatory")
-	private String extension;	
+
+  private String extension;	
 	
 	@NotNull(message = "userName is mandatory")
 	private String userName;
@@ -120,7 +119,5 @@ public class Customer implements Serializable {
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
-	
-	
-			
+				
 }
