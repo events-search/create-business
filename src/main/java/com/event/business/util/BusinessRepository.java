@@ -24,13 +24,13 @@ public class BusinessRepository {
 	private DynamoDBMapper mapper;
 
 	public BusinessDetails insertIntoDB(BusinessDetails businessDetails) {
-		mapper.save(businessDetails);
+		mapper.save(processBusiness(businessDetails));
 		return businessDetails;
 
 	}
 
 	public BusinessDetails updateIntoDB(BusinessDetails businessDetails, String primaryKeyValue) {
-		mapper.save(businessDetails, EventUtil.getBuildExpression("businessId", primaryKeyValue));
+		mapper.save(processBusiness(businessDetails), EventUtil.getBuildExpression("businessId", primaryKeyValue));
 		return businessDetails;
 	}
 
@@ -57,7 +57,7 @@ public class BusinessRepository {
 		Map<String, Condition> filters = new HashMap<>();
 		DynamoDBScanExpression scanner = new DynamoDBScanExpression();
 		if (!StringUtils.isEmpty(businessDetails.getPrimaryCountry())) {
-			filters.put("primaryCountry", getCondition(businessDetails.getPrimaryCountry()));
+			filters.put("country", getCondition(getUppercaseValue(businessDetails.getPrimaryCountry())));
 		}
 		if (!StringUtils.isEmpty(businessDetails.getUserName())) {
 			filters.put("userName", getCondition(businessDetails.getUserName()));
@@ -69,10 +69,10 @@ public class BusinessRepository {
 			filters.put("businessType", getCondition(businessDetails.getBusinessType()));
 		}
 		if (!StringUtils.isEmpty(businessDetails.getPrimaryCity())) {
-			filters.put("primaryCity", getCondition(businessDetails.getPrimaryCity()));
+			filters.put("city", getCondition(getUppercaseValue(businessDetails.getPrimaryCity())));
 		}
 		if (!StringUtils.isEmpty(businessDetails.getPrimaryState())) {
-			filters.put("primaryState", getCondition(businessDetails.getPrimaryState()));
+			filters.put("state", getCondition(getUppercaseValue(businessDetails.getPrimaryState())));
 		}
 		if (!StringUtils.isEmpty(businessDetails.getPrimaryZipCode())) {
 			filters.put("primaryZipCode", getCondition(businessDetails.getPrimaryZipCode()));
@@ -87,6 +87,22 @@ public class BusinessRepository {
 		c.withComparisonOperator(ComparisonOperator.EQ);
 		c.withAttributeValueList(new AttributeValue().withS(val));
 		return c;
+	}
+	
+	private BusinessDetails processBusiness(BusinessDetails businessDetails) {
+		if(null != businessDetails) {
+			businessDetails.setCountry(getUppercaseValue(businessDetails.getPrimaryCountry()));
+			businessDetails.setCity(getUppercaseValue(businessDetails.getPrimaryCity()));
+			businessDetails.setState(getUppercaseValue(businessDetails.getPrimaryState()));
+		}
+		return businessDetails;		
+	}
+	
+	private String getUppercaseValue(String text) {
+		if(!StringUtils.isEmpty(text)) {
+			return text.toUpperCase();
+		}
+		return text;
 	}
 
 	public DynamoDBMapper getMapper() {
