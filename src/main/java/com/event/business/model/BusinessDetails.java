@@ -467,7 +467,7 @@ public class BusinessDetails implements Serializable {
 		this.rating = rating;
 	}
 
-	@DynamoDBAttribute
+  @DynamoDBAttribute
 	public String getSecondaryAddressType() {
 		return secondaryAddressType;
 	}
