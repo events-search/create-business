@@ -69,7 +69,7 @@ public class BusinessDetails implements Serializable {
 
 	private String businessDescription;
 
-	private List<Service> servicesProvided;
+	private List<String> servicesProvided;
 
 	@NotNull(message = "password is mandatory")
 	private String password;
@@ -217,11 +217,12 @@ public class BusinessDetails implements Serializable {
 		this.businessDescription = businessDescription;
 	}
 
-	public List<Service> getServicesProvided() {
+	@DynamoDBAttribute
+	public List<String> getServicesProvided() {
 		return servicesProvided;
 	}
 
-	public void setServicesProvided(List<Service> servicesProvided) {
+	public void setServicesProvided(List<String> servicesProvided) {
 		this.servicesProvided = servicesProvided;
 	}
 
@@ -475,5 +476,5 @@ public class BusinessDetails implements Serializable {
 	public void setThirdAddressType(String thirdAddressType) {
 		this.thirdAddressType = thirdAddressType;
 	}
-		
+	
 }

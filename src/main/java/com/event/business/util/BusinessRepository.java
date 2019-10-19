@@ -3,7 +3,6 @@ package com.event.business.util;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -44,12 +43,6 @@ public class BusinessRepository {
 
 	public List<BusinessDetails> getObject(BusinessDetails businessDetails) {
 		List<BusinessDetails> result = mapper.scan(BusinessDetails.class, getBusinessScanner(businessDetails));
-		if (!CollectionUtils.isEmpty(businessDetails.getServicesProvided())) {
-			result = result.stream().filter(p -> p.getServicesProvided().stream().map(s -> s.getServiceName()).anyMatch(
-					x -> businessDetails.getServicesProvided().stream().anyMatch(b -> b.getServiceName().equals(x))))
-					.collect(Collectors.toList());
-		}
-
 		return result;
 	}
 
@@ -77,7 +70,11 @@ public class BusinessRepository {
 		if (!StringUtils.isEmpty(businessDetails.getPrimaryZipCode())) {
 			filters.put("primaryZipCode", getCondition(businessDetails.getPrimaryZipCode()));
 		}
-
+		if (!CollectionUtils.isEmpty(businessDetails.getServicesProvided())) {
+			for (String service : businessDetails.getServicesProvided()) {
+				filters.put("servicesProvided", getListCondition(service));
+			}
+		}
 		scanner.setScanFilter(filters);
 		return scanner;
 	}
@@ -85,6 +82,13 @@ public class BusinessRepository {
 	private Condition getCondition(String val) {
 		Condition c = new Condition();
 		c.withComparisonOperator(ComparisonOperator.EQ);
+		c.withAttributeValueList(new AttributeValue().withS(val));
+		return c;
+	}
+
+	private Condition getListCondition(String val) {
+		Condition c = new Condition();
+		c.withComparisonOperator(ComparisonOperator.CONTAINS);
 		c.withAttributeValueList(new AttributeValue().withS(val));
 		return c;
 	}
