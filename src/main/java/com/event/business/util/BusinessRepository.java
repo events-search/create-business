@@ -3,7 +3,6 @@ package com.event.business.util;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -24,13 +23,13 @@ public class BusinessRepository {
 	private DynamoDBMapper mapper;
 
 	public BusinessDetails insertIntoDB(BusinessDetails businessDetails) {
-		mapper.save(processBusiness(businessDetails));
+		mapper.save(businessDetails);
 		return businessDetails;
 
 	}
 
 	public BusinessDetails updateIntoDB(BusinessDetails businessDetails, String primaryKeyValue) {
-		mapper.save(processBusiness(businessDetails), EventUtil.getBuildExpression("businessId", primaryKeyValue));
+		mapper.save(businessDetails, EventUtil.getBuildExpression("businessId", primaryKeyValue));
 		return businessDetails;
 	}
 
@@ -44,12 +43,6 @@ public class BusinessRepository {
 
 	public List<BusinessDetails> getObject(BusinessDetails businessDetails) {
 		List<BusinessDetails> result = mapper.scan(BusinessDetails.class, getBusinessScanner(businessDetails));
-		if (!CollectionUtils.isEmpty(businessDetails.getServicesProvided())) {
-			result = result.stream().filter(p -> p.getServicesProvided().stream().map(s -> s.getServiceName()).anyMatch(
-					x -> businessDetails.getServicesProvided().stream().anyMatch(b -> b.getServiceName().equals(x))))
-					.collect(Collectors.toList());
-		}
-
 		return result;
 	}
 
@@ -57,7 +50,7 @@ public class BusinessRepository {
 		Map<String, Condition> filters = new HashMap<>();
 		DynamoDBScanExpression scanner = new DynamoDBScanExpression();
 		if (!StringUtils.isEmpty(businessDetails.getPrimaryCountry())) {
-			filters.put("country", getCondition(getUppercaseValue(businessDetails.getPrimaryCountry())));
+			filters.put("primaryCountry", getCondition(businessDetails.getPrimaryCountry()));
 		}
 		if (!StringUtils.isEmpty(businessDetails.getUserName())) {
 			filters.put("userName", getCondition(businessDetails.getUserName()));
@@ -69,15 +62,19 @@ public class BusinessRepository {
 			filters.put("businessType", getCondition(businessDetails.getBusinessType()));
 		}
 		if (!StringUtils.isEmpty(businessDetails.getPrimaryCity())) {
-			filters.put("city", getCondition(getUppercaseValue(businessDetails.getPrimaryCity())));
+			filters.put("primaryCity", getCondition(businessDetails.getPrimaryCity()));
 		}
 		if (!StringUtils.isEmpty(businessDetails.getPrimaryState())) {
-			filters.put("state", getCondition(getUppercaseValue(businessDetails.getPrimaryState())));
+			filters.put("primaryState", getCondition(businessDetails.getPrimaryState()));
 		}
 		if (!StringUtils.isEmpty(businessDetails.getPrimaryZipCode())) {
 			filters.put("primaryZipCode", getCondition(businessDetails.getPrimaryZipCode()));
 		}
-
+		if (!CollectionUtils.isEmpty(businessDetails.getServicesProvided())) {
+			for (String service : businessDetails.getServicesProvided()) {
+				filters.put("servicesProvided", getListCondition(service));
+			}
+		}
 		scanner.setScanFilter(filters);
 		return scanner;
 	}
@@ -88,21 +85,12 @@ public class BusinessRepository {
 		c.withAttributeValueList(new AttributeValue().withS(val));
 		return c;
 	}
-	
-	private BusinessDetails processBusiness(BusinessDetails businessDetails) {
-		if(null != businessDetails) {
-			businessDetails.setCountry(getUppercaseValue(businessDetails.getPrimaryCountry()));
-			businessDetails.setCity(getUppercaseValue(businessDetails.getPrimaryCity()));
-			businessDetails.setState(getUppercaseValue(businessDetails.getPrimaryState()));
-		}
-		return businessDetails;		
-	}
-	
-	private String getUppercaseValue(String text) {
-		if(!StringUtils.isEmpty(text)) {
-			return text.toUpperCase();
-		}
-		return text;
+
+	private Condition getListCondition(String val) {
+		Condition c = new Condition();
+		c.withComparisonOperator(ComparisonOperator.CONTAINS);
+		c.withAttributeValueList(new AttributeValue().withS(val));
+		return c;
 	}
 
 	public DynamoDBMapper getMapper() {

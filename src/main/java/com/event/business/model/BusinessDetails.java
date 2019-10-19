@@ -69,7 +69,7 @@ public class BusinessDetails implements Serializable {
 
 	private String businessDescription;
 
-	private List<Service> servicesProvided;
+	private List<String> servicesProvided;
 
 	@NotNull(message = "password is mandatory")
 	private String password;
@@ -97,15 +97,6 @@ public class BusinessDetails implements Serializable {
 	@NotNull(message = "primaryCountry is mandatory")
 	private String primaryCountry;
 	
-	@NotNull(message = "city is mandatory")
-	private String city;
-
-	@NotNull(message = "state is mandatory")
-	private String state;
-	
-	@NotNull(message = "country is mandatory")
-	private String country;
-		
 	private String secondaryAddressLine1;
 
 	private String secondaryAddressLine2;
@@ -226,11 +217,12 @@ public class BusinessDetails implements Serializable {
 		this.businessDescription = businessDescription;
 	}
 
-	public List<Service> getServicesProvided() {
+	@DynamoDBAttribute
+	public List<String> getServicesProvided() {
 		return servicesProvided;
 	}
 
-	public void setServicesProvided(List<Service> servicesProvided) {
+	public void setServicesProvided(List<String> servicesProvided) {
 		this.servicesProvided = servicesProvided;
 	}
 
@@ -483,33 +475,6 @@ public class BusinessDetails implements Serializable {
 
 	public void setThirdAddressType(String thirdAddressType) {
 		this.thirdAddressType = thirdAddressType;
-	}
-
-	@DynamoDBAttribute
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	@DynamoDBAttribute	
-	public String getState() {
-		return state;
-	}
-
-	public void setState(String state) {
-		this.state = state;
-	}
-
-	@DynamoDBAttribute	
-	public String getCountry() {
-		return country;
-	}
-
-	public void setCountry(String country) {
-		this.country = country;
 	}
 	
 }
