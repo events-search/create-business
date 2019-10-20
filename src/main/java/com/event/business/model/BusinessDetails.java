@@ -60,7 +60,6 @@ public class BusinessDetails implements Serializable {
 	@Email
 	private String email;
 
-	@NotNull(message = "websiteUrl is mandatory")
 	private String websiteUrl;
 
 	private String businessEstDate;
