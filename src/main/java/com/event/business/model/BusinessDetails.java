@@ -78,7 +78,6 @@ public class BusinessDetails implements Serializable {
 	@NotNull(message = "primaryAddressLine1 is mandatory")
 	private String primaryAddressLine1;
 
-	@NotNull(message = "primaryAddressLine2 is mandatory")
 	private String primaryAddressLine2;
 
 	@NotNull(message = "primaryCity is mandatory")
@@ -90,7 +89,6 @@ public class BusinessDetails implements Serializable {
 	@NotNull(message = "primaryZipCode is mandatory")
 	private String primaryZipCode;
 
-	@NotNull(message = "primaryLandmark is mandatory")
 	private String primaryLandmark;
 
 	@NotNull(message = "primaryCountry is mandatory")
