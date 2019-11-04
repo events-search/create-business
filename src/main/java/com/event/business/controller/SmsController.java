@@ -29,7 +29,7 @@ public class SmsController {
 
 	private static final long EXPIRY_TIME = 60000;
 
-	private static final String FROM_PHONE_NO = "+12563927802";
+	private static final String FROM_PHONE_NO = "";
 
 	private static final String OTP_MESSAGE = "This is your otp: ";
 
@@ -48,12 +48,12 @@ public class SmsController {
 	private static final String OTP_VERIFY_SUCCESS_MSG = "OTP verified successfully";
 
 	private static final String OTP_MISSING_MSG = "please provide OTP";
-	
-	private static final String TWILIO_ACCOUNT_ID = "ACe15ada4ae7ee249cf0624a9717a2d28d";
-	
-	private static final String TWILIO_AUTH_ID = "723b96cf93a2faaba5aeb855d1b865fa";
-	
-	static {
+
+	private static final String TWILIO_ACCOUNT_ID = "";
+
+	private static final String TWILIO_AUTH_ID = "";
+
+  static {
 		Twilio.init(TWILIO_ACCOUNT_ID, TWILIO_AUTH_ID);
 	}
 
@@ -75,7 +75,6 @@ public class SmsController {
 		Message.creator(new PhoneNumber(phoneNumber), new PhoneNumber(FROM_PHONE_NO), message).create();
 		return new ResponseEntity<>(SUCCESS_MSG, HttpStatus.OK);
 	}
-
 
 	private int getRandomNumber() {
 		// return ((int) (Math.random() * (10000 - 1000))) * 1000;
